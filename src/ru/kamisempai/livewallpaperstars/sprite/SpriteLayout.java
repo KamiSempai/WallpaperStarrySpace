@@ -53,9 +53,9 @@ public class SpriteLayout {
 		return mScale;
 	}
 	
-	public void update(long timeElapsed) {
+	public void update(long timeDelta) {
 		for(ISprite sprite: mSprites) {
-			sprite.update(timeElapsed);
+			sprite.update(timeDelta);
 		}
 	}
 }

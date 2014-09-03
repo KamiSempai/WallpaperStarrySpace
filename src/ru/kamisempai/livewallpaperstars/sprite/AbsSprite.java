@@ -13,6 +13,8 @@ public abstract class AbsSprite implements ISprite {
 	
 	private float mScale;
 	
+	private ISpriteUpdater mUpdater;
+	
 	public AbsSprite(float x, float y, float width, float height) {
 		this(x, y, width, height, 1);
 	}
@@ -84,9 +86,14 @@ public abstract class AbsSprite implements ISprite {
 		return visibleRect.intersects(mX, mY, mX + mWidth, mY + mHeight);
 	}
 	
+	public void setSpriteUpdater(ISpriteUpdater updater) {
+		mUpdater = updater;
+	}
+	
 	@Override
-	public void update(long timeElapsed) {
-
+	public void update(long timeDelta) {
+		if(mUpdater != null)
+			mUpdater.update(this, timeDelta);
 	}
 
 }

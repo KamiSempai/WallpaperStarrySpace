@@ -21,5 +21,5 @@ public interface ISprite {
 	
 	public boolean isVisible(RectF visibleRect);
 	
-	public void update(long timeElapsed);
+	public void update(long timeDelta);
 }
