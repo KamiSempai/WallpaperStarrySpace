@@ -81,7 +81,7 @@ public abstract class AbsSprite implements ISprite {
 
 	@Override
 	public boolean isVisible(RectF visibleRect) {
-		return true;
+		return visibleRect.intersects(mX, mY, mX + mWidth, mY + mHeight);
 	}
 	
 	@Override

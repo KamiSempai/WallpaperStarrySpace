@@ -4,6 +4,7 @@ import ru.kamisempai.livewallpaperstars.sprite.SpriteLayout;
 import ru.kamisempai.livewallpaperstars.sprite.StarsLayout;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
@@ -13,6 +14,7 @@ public class LiveWallpaperService extends WallpaperService {
 	private static final int STARS_COUNT = 300;
 	private static final float DEPTH_MIN = 0.7f;
 	private static final float DEPTH_MAX = 1.2f;
+	private static final int FRAME_RATE = 30;
 
 	public Engine onCreateEngine() {
 		return new MyWallpaperEngine();
@@ -32,6 +34,7 @@ public class LiveWallpaperService extends WallpaperService {
 		private long lastTimeUpdate;
 		private StarsLayout[] mLayouts;
 		private int surfaceWidth; 
+		private RectF mVisibleRect;
 
 		MyWallpaperEngine() {
 			
@@ -55,6 +58,8 @@ public class LiveWallpaperService extends WallpaperService {
 			super.onSurfaceChanged(holder, format, width, height);
 			
 			surfaceWidth = width;
+			
+			mVisibleRect = new RectF(0, 0, width, height);
 
 			float layoutWidth = width * 3;
 			float layoutHeight = height;
@@ -99,7 +104,7 @@ public class LiveWallpaperService extends WallpaperService {
 				if (canvas != null) {
 					canvas.drawColor(Color.BLACK);// clear the canvas
 					for(SpriteLayout layout: mLayouts)
-						layout.draw(canvas);
+						layout.draw(canvas, mVisibleRect);
 				}
 			} finally {
 				if (canvas != null)
@@ -108,7 +113,7 @@ public class LiveWallpaperService extends WallpaperService {
 
 			handler.removeCallbacks(drawRunner);
 			if (visible) {
-				handler.postDelayed(drawRunner, 10); // delay 10 mileseconds
+				handler.postDelayed(drawRunner, 1000 / FRAME_RATE); // delay 10 mileseconds
 			}
 
 		}

@@ -27,7 +27,7 @@ public class StarsLayout extends SpriteLayout {
 	@Override
 	public void update(long timeElapsed) {
 		if(mSprites.size() < mStarsCount) {
-			StartSprite sprite = new StartSprite(mRandom.nextFloat() * mWidth, mRandom.nextFloat() * mHeight, mStarSize, mStarSize, mStarsColor, mRandom.nextFloat());
+			StarSprite sprite = new StarSprite(mRandom.nextFloat() * mWidth, mRandom.nextFloat() * mHeight, mStarSize, mStarSize, mStarsColor, mRandom.nextFloat());
 			addSprite(sprite);
 		}
 		super.update(timeElapsed);

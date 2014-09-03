@@ -5,11 +5,12 @@ import java.util.Random;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Paint.Style;
 import android.graphics.RadialGradient;
 import android.graphics.Shader.TileMode;
 
-public class StartSprite extends AbsSprite {
+public class StarSprite extends AbsSprite {
 	private static final float CORE_SIZE = 0.5f;
 	private static final float GLOW_SIZE = 3.5f;
 	private static final float FLASH_STEP_PER_SEC = 0.5f;
@@ -24,11 +25,11 @@ public class StartSprite extends AbsSprite {
 	private float mFlashState;
 	private float mFlashSign;
 	
-	public StartSprite(float x, float y, float width, float height, int color) {
+	public StarSprite(float x, float y, float width, float height, int color) {
 		this(x, y, width, height, color, new Random(System.currentTimeMillis()).nextFloat());
 	}
 	
-	public StartSprite(float x, float y, float width, float height, int color, float flashState) {
+	public StarSprite(float x, float y, float width, float height, int color, float flashState) {
 		super(x, y, width, height);
 		mColor = color;
 		mCorePaint = new Paint();
@@ -36,7 +37,7 @@ public class StartSprite extends AbsSprite {
 		mCorePaint.setColor(mColor);
 		
 		mGlowPaint = new Paint();
-		mGlowPaint.setStyle(Style.FILL);
+		mGlowPaint.setStyle(Style.STROKE);
 		mGlowPaint.setColor(mColor);
 		mGlowPaint.setShader(new RadialGradient(0, 0,
 				Math.min(getHeight(), getWidth()) * GLOW_SIZE, mColor, Color.TRANSPARENT, TileMode.MIRROR));
@@ -50,7 +51,8 @@ public class StartSprite extends AbsSprite {
 	public void draw(Canvas canvas) {
 		aplyTransformation(canvas);
 
-		canvas.drawCircle(0, 0, Math.min(getHeight(), getWidth()) * GLOW_SIZE, mGlowPaint);
+		mGlowPaint.setStrokeWidth(Math.min(getHeight(), getWidth()) * GLOW_SIZE);
+		canvas.drawPoint(0, 0, mGlowPaint);
 		canvas.drawCircle(0, 0, Math.min(getHeight(), getWidth()) * CORE_SIZE, mCorePaint);
 		
 		undoTransformation(canvas);
@@ -58,9 +60,15 @@ public class StartSprite extends AbsSprite {
 
 	@Override
 	public void update(long timeElapsed) {
-		mFlashState += FLASH_STEP_PER_SEC * (float) timeElapsed / 1000f * mFlashSign;
+		float delta = FLASH_STEP_PER_SEC * (float) timeElapsed / 1000f;
+		if(delta > MAX_FLASH_STATE - MIN_FLASH_STATE) {
+			if((delta / (MAX_FLASH_STATE - MIN_FLASH_STATE)) % 2 != 0)
+				mFlashSign *= -1;
+			delta = delta % (MAX_FLASH_STATE - MIN_FLASH_STATE);
+		}
+		mFlashState += delta * mFlashSign;
 		if(mFlashState <= MIN_FLASH_STATE) {
-			mFlashState = MIN_FLASH_STATE;
+			mFlashState = MIN_FLASH_STATE + MIN_FLASH_STATE - mFlashState;
 			mFlashSign = 1;
 		}
 		if(mFlashState > MAX_FLASH_STATE) {
@@ -70,5 +78,10 @@ public class StartSprite extends AbsSprite {
 			setScale(FLASH_STATE_LIMIT);
 		else
 			setScale(mFlashState);
+	}
+
+	@Override
+	public boolean isVisible(RectF visibleRect) {
+		return visibleRect.intersects(getX() - getWidth() / 2, getY() - getHeight() / 2, getX() + getWidth() / 2, getY() + getHeight() / 2);
 	}
 }

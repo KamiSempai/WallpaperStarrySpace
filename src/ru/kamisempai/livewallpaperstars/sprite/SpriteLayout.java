@@ -3,6 +3,7 @@ package ru.kamisempai.livewallpaperstars.sprite;
 import java.util.ArrayList;
 
 import android.graphics.Canvas;
+import android.graphics.RectF;
 
 public class SpriteLayout {
 	private float mX = 0;
@@ -12,11 +13,16 @@ public class SpriteLayout {
 
 	protected ArrayList<ISprite> mSprites = new ArrayList<ISprite>();
 	
-	public void draw(Canvas canvas) {
+	public void draw(Canvas canvas, RectF vsibleRect) {
+		RectF rect = new RectF(vsibleRect);
+		rect.offsetTo(-mX, 0);
+
 		canvas.translate(mX, mY);
 		canvas.scale(mScale, mScale);
 		for(ISprite sprite: mSprites) {
-			sprite.draw(canvas);
+			if(sprite.isVisible(rect)) {
+				sprite.draw(canvas);
+			}
 		}
 		canvas.scale(1/mScale, 1/mScale);
 		canvas.translate(-mX, -mY);
