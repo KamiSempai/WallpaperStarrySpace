@@ -9,10 +9,18 @@ import android.graphics.RectF;
 public class BitmapSprite extends AbsSprite {
 	private Bitmap mBitmap;
 	private Paint mPaint;
+	private RectF mBitmapRect;
+	
 
-	public BitmapSprite(float x, float y, Bitmap bitmap) {
-		super(x, y, bitmap.getWidth(), bitmap.getHeight());
+	public BitmapSprite(Bitmap bitmap, float x, float y) {
+		this(bitmap, x, y, bitmap.getWidth(), bitmap.getHeight());
+	}
+
+	public BitmapSprite(Bitmap bitmap, float x, float y, float width, float height) {
+		super(x, y, width, height);
 		mBitmap = bitmap;
+		mBitmapRect = new RectF(0, 0, width, height);
+		
 		mPaint = new Paint();
 		mPaint.setStyle(Style.FILL);
 	}
@@ -20,6 +28,12 @@ public class BitmapSprite extends AbsSprite {
 	@Override
 	protected void drawLayout(Canvas canvas, RectF vsibleRect) {
 		super.drawLayout(canvas, vsibleRect);
-		canvas.drawBitmap(mBitmap, 0, 0, mPaint);
+		canvas.drawBitmap(mBitmap, null, mBitmapRect, mPaint);
+	}
+	
+	@Override
+	protected void updateRect(float x, float y, float width, float height) {
+		super.updateRect(x, y, width, height);
+		mBitmapRect.set(0, 0, width, height);
 	}
 }

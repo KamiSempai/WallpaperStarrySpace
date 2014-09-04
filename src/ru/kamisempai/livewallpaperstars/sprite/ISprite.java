@@ -1,5 +1,6 @@
 package ru.kamisempai.livewallpaperstars.sprite;
 
+import ru.kamisempai.livewallpaperstars.sprite.updater.ISpriteUpdater;
 import android.graphics.RectF;
 
 public interface ISprite extends ILayout {
@@ -10,4 +11,11 @@ public interface ISprite extends ILayout {
 	public float getHeight();
 	
 	public boolean isVisible(RectF visibleRect);
+	
+	public void setSpriteUpdater(ISpriteUpdater updater);
+	public ISpriteUpdater getSpriteUpdater();
+	
+	public void setParrent(ILayout parent);
+	public ILayout getParent();
+	public void removeFromParent();
 }

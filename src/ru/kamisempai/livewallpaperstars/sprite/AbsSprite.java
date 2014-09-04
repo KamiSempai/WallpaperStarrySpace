@@ -7,9 +7,10 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 
 
-public abstract class AbsSprite extends AbsSpriteLayout implements ISprite {
+public class AbsSprite extends AbsSpriteLayout implements ISprite {
 	protected RectF mSpriteRect;
 	
+	private ILayout mParent;
 	private ISpriteUpdater mUpdater;
 	private Paint mBackGroundPaint;
 	
@@ -19,8 +20,7 @@ public abstract class AbsSprite extends AbsSpriteLayout implements ISprite {
 	
 	public AbsSprite(float x, float y, float width, float height, float scale) {
 		super(x, y, scale);
-		mSpriteRect = new RectF();
-		updateRect(x, y, width, height);
+		mSpriteRect = new RectF(x, x, x + width, x + height);
 	}
 
 	@Override
@@ -70,6 +70,23 @@ public abstract class AbsSprite extends AbsSpriteLayout implements ISprite {
 	
 	public void setSpriteUpdater(ISpriteUpdater updater) {
 		mUpdater = updater;
+	}
+	
+	public ISpriteUpdater getSpriteUpdater() {
+		return mUpdater;
+	}
+	
+	public void setParrent(ILayout parent) {
+		mParent = parent;
+	}
+	
+	public ILayout getParent() {
+		return mParent;
+	}
+	
+	public void removeFromParent() {
+		if(mParent != null)
+			mParent.removeSprite(this);
 	}
 	
 	@Override
