@@ -3,8 +3,8 @@ package ru.kamisempai.livewallpaperstars.sprite;
 import android.annotation.SuppressLint;
 import java.security.SecureRandom;
 
-public class StarsLayout extends SpriteLayout {
-	private static final float STAR_SIZE = 7;
+public class StarsLayout extends AbsSpriteLayout {
+	private static final float STAR_SIZE = 18;
 	
 	private float mWidth;
 	private float mHeight;
@@ -16,7 +16,7 @@ public class StarsLayout extends SpriteLayout {
 
 	@SuppressLint("TrulyRandom")
 	public StarsLayout(float width, float height, int starsCount, float depth) {
-		super();
+		super(0, 0, 1);
 		mWidth = width * depth;
 		mHeight = height;
 		mStarsCount = starsCount;
@@ -26,7 +26,7 @@ public class StarsLayout extends SpriteLayout {
 	
 	@Override
 	public void update(long timeElapsed) {
-		if(mSprites.size() < mStarsCount) {
+		if(mSprites == null || mSprites.size() < mStarsCount) {
 			StarSprite sprite = new StarSprite(mRandom.nextFloat() * mWidth, mRandom.nextFloat() * mHeight, mStarSize, mStarSize, mStarsColor, mRandom.nextFloat());
 			addSprite(sprite);
 		}
@@ -39,9 +39,10 @@ public class StarsLayout extends SpriteLayout {
 	}
 	
 	private void moveStars() {
-		for(ISprite sprite: mSprites) {
-			if(sprite.getScale() <= 0.05)
-				sprite.setPosition(mRandom.nextFloat() * mWidth, mRandom.nextFloat() * mHeight);
-		}
+		if(mSprites != null)
+			for(ISprite sprite: mSprites) {
+				if(sprite.getScale() <= 0.05)
+					sprite.setPosition(mRandom.nextFloat() * mWidth, mRandom.nextFloat() * mHeight);
+			}
 	}
 }

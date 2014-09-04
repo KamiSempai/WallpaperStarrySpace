@@ -1,89 +1,70 @@
 package ru.kamisempai.livewallpaperstars.sprite;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.RectF;
 
 
-public abstract class AbsSprite implements ISprite {
-	private float mX;
-	private float mY;
-	
-	private float mWidth;
-	private float mHeight;
-	
-	private float mScale;
+public abstract class AbsSprite extends AbsSpriteLayout implements ISprite {
+	protected RectF mSpriteRect;
 	
 	private ISpriteUpdater mUpdater;
+	private Paint mBackGroundPaint;
 	
 	public AbsSprite(float x, float y, float width, float height) {
 		this(x, y, width, height, 1);
 	}
 	
 	public AbsSprite(float x, float y, float width, float height, float scale) {
-		mX = x;
-		mY = y;
-		mWidth = width;
-		mHeight = height;
-		mScale = scale;
-	}
-	
-	@Override
-	public void aplyTransformation(Canvas canvas) {
-		canvas.translate(mX, mY);
-		canvas.scale(mScale, mScale);
-	}
-	
-	@Override
-	public void undoTransformation(Canvas canvas) {
-		canvas.scale(1/mScale, 1/mScale);
-		canvas.translate(-mX, -mY);
-	}
-
-	@Override
-	public void setPosition(float x, float y) {
-		mX = x;
-		mY = y;
+		super(x, y, scale);
+		mSpriteRect = new RectF();
+		updateRect(x, y, width, height);
 	}
 
 	@Override
 	public void setSize(float width, float height) {
-		mWidth = width;
-		mHeight = height;
+		updateRect(mX, mY, width, height);
 	}
-
+	
 	@Override
-	public void setScale(float scale) {
-		mScale = scale;
+	public void setPosition(float x, float y) {
+		super.setPosition(x, y);
+		updateRect(x, y, mSpriteRect.width(), mSpriteRect.height());
 	}
-
-	@Override
-	public float getX() {
-		return mX;
-	}
-
-	@Override
-	public float getY() {
-		return mY;
-	}
-
+	
 	@Override
 	public float getWidth() {
-		return mWidth;
+		return mSpriteRect.width();
 	}
 
 	@Override
 	public float getHeight() {
-		return mHeight;
-	}
-
-	@Override
-	public float getScale() {
-		return mScale;
+		return mSpriteRect.height();
 	}
 
 	@Override
 	public boolean isVisible(RectF visibleRect) {
-		return visibleRect.intersects(mX, mY, mX + mWidth, mY + mHeight);
+		return RectF.intersects(visibleRect, mSpriteRect);
+	}
+	
+	@Override
+	protected void drawLayout(Canvas canvas, RectF vsibleRect) {
+		super.drawLayout(canvas, vsibleRect);
+		if(mBackGroundPaint != null)
+			canvas.drawRect(0, 0, mSpriteRect.width(), mSpriteRect.height(), mBackGroundPaint);
+	}
+	
+	public void setBackgroundColor(int color) {
+		if(mBackGroundPaint == null) {
+			mBackGroundPaint = new Paint();
+			mBackGroundPaint.setStyle(Style.FILL);
+		}
+		mBackGroundPaint.setColor(color);
+	}
+	
+	public void setBackgroundTransparent() {
+		mBackGroundPaint = null;
 	}
 	
 	public void setSpriteUpdater(ISpriteUpdater updater) {
@@ -96,4 +77,7 @@ public abstract class AbsSprite implements ISprite {
 			mUpdater.update(this, timeDelta);
 	}
 
+	protected void updateRect(float x, float y, float width, float height) {
+		mSpriteRect.set(x, x, x + width, x + height);
+	}
 }

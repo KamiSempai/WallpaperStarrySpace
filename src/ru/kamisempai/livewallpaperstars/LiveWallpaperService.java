@@ -1,6 +1,6 @@
 package ru.kamisempai.livewallpaperstars;
 
-import ru.kamisempai.livewallpaperstars.sprite.SpriteLayout;
+import ru.kamisempai.livewallpaperstars.sprite.ILayout;
 import ru.kamisempai.livewallpaperstars.sprite.StarsLayout;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -91,7 +91,7 @@ public class LiveWallpaperService extends WallpaperService {
 			long newTime = System.currentTimeMillis();
 			if(lastTimeUpdate > 0) {
 				long timeDelta = newTime - lastTimeUpdate;
-				for(SpriteLayout layout: mLayouts)
+				for(ILayout layout: mLayouts)
 					layout.update(timeDelta);
 			}
 			lastTimeUpdate = newTime;
@@ -103,7 +103,7 @@ public class LiveWallpaperService extends WallpaperService {
 				canvas = holder.lockCanvas();
 				if (canvas != null) {
 					canvas.drawColor(Color.BLACK);// clear the canvas
-					for(SpriteLayout layout: mLayouts)
+					for(ILayout layout: mLayouts)
 						layout.draw(canvas, mVisibleRect);
 				}
 			} finally {
