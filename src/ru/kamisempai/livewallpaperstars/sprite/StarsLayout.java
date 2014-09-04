@@ -25,12 +25,12 @@ public class StarsLayout extends AbsSpriteLayout {
 	}
 	
 	@Override
-	public void update(long timeElapsed) {
+	public void update(long timeDelta) {
 		if(mSprites == null || mSprites.size() < mStarsCount) {
 			StarSprite sprite = new StarSprite(mRandom.nextFloat() * mWidth, mRandom.nextFloat() * mHeight, mStarSize, mStarSize, mStarsColor, mRandom.nextFloat());
 			addSprite(sprite);
 		}
-		super.update(timeElapsed);
+		super.update(timeDelta);
 		moveStars();
 	}
 	

@@ -2,6 +2,7 @@ package ru.kamisempai.livewallpaperstars.sprite;
 
 import java.util.Random;
 
+import ru.kamisempai.livewallpaperstars.sprite.updater.ISpriteUpdater;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;

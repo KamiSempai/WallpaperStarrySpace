@@ -11,10 +11,12 @@ public interface ILayout {
 	
 	public void setPosition(float x, float y);
 	public void setScale(float scale);
+	public void setRotation(float rotation, float centerX, float centerY);
 
 	public float getX();
 	public float getY();
 	public float getScale();
+	public float getRotation();
 	
 	public void update(long timeDelta);
 

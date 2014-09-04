@@ -2,7 +2,6 @@ package ru.kamisempai.livewallpaperstars.sprite;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
@@ -16,7 +15,6 @@ public class BitmapSprite extends AbsSprite {
 		mBitmap = bitmap;
 		mPaint = new Paint();
 		mPaint.setStyle(Style.FILL);
-		setBackgroundColor(Color.WHITE);
 	}
 
 	@Override

@@ -9,8 +9,11 @@ import android.graphics.RectF;
 public class AbsSpriteLayout implements ILayout {
 	protected float mX;
 	protected float mY;
-	
+
 	protected float mScale;
+	protected float mRotation;
+	protected float mRotationCenterX;
+	protected float mRotationCenterY;
 
 	protected ArrayList<ISprite> mSprites;
 	protected LinkedBlockingDeque<ISprite> mSpritesToRemove = new LinkedBlockingDeque<ISprite>();
@@ -56,12 +59,15 @@ public class AbsSpriteLayout implements ILayout {
 	@Override
 	public void bind(Canvas canvas) {
 		canvas.translate(mX, mY);
+		if(mRotation != 0)
+			canvas.rotate(mRotation, mRotationCenterX, mRotationCenterY);
 		canvas.scale(mScale, mScale);
 	}
 
 	@Override
 	public void unbind(Canvas canvas) {
 		canvas.scale(1/mScale, 1/mScale);
+		canvas.rotate(-mRotation, mRotationCenterX, mRotationCenterY);
 		canvas.translate(-mX, -mY);
 	}
 	
@@ -85,6 +91,12 @@ public class AbsSpriteLayout implements ILayout {
 		mScale = scale;
 	}
 
+	public void setRotation(float rotation, float centerX, float centerY) {
+		mRotation = rotation;
+		mRotationCenterX = centerX;
+		mRotationCenterY = centerY;
+	}
+
 	public float getX() {
 		return mX;
 	}
@@ -95,6 +107,11 @@ public class AbsSpriteLayout implements ILayout {
 
 	public float getScale() {
 		return mScale;
+	}
+	
+	@Override
+	public float getRotation() {
+		return mRotation;
 	}
 	
 	public void update(long timeDelta) {

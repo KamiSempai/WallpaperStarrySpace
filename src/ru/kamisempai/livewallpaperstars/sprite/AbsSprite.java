@@ -1,5 +1,6 @@
 package ru.kamisempai.livewallpaperstars.sprite;
 
+import ru.kamisempai.livewallpaperstars.sprite.updater.ISpriteUpdater;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
