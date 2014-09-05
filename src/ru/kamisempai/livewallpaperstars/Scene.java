@@ -14,19 +14,18 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class Scene {
 	private static final float STAR_SIZE = 18;
-	private static final int LAYOUT_COUNT = 2;
-	private static final int UFO_COUNT = 0;
-	private static final int UFO_DELAY = 20000;
+	private static final int LAYOUT_COUNT = 20;
+	private static final int UFO_COUNT = 10;
+	private static final int UFO_DELAY = 2000;
 	private static final float UFO_ROTATE_MAX_SPEED = 30;
 	private static final float UFO_ROTATE_MIN_SPEED = 10;
 	private static final float UFO_MAX_SPEED = 30;
 	private static final float UFO_MIN_SPEED = 10;
-	private static final int STARS_COUNT = 600;
+	private static final int STARS_COUNT = 300;
 	private static final float DEPTH_MIN = 0.7f;
 	private static final float DEPTH_MAX = 1.2f;
 	
@@ -63,7 +62,6 @@ public class Scene {
 			float yStep, int xPixels, int yPixels) {
 		for(StarsLayout layout: mLayouts) {
 			layout.setPosition((surfaceWidth - layout.getWidth()) * xOffset, 0);
-			Log.d("DEBUG", "toEnd=" + (layout.getWidth() + layout.getX() - surfaceWidth) + "X=" + layout.getX() + " W=" + layout.getWidth());
 		}
 	}
 	
@@ -119,16 +117,16 @@ public class Scene {
 			float delta = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 			
 			float time = delta / speed * 1000;
-			SpriteModifiersSet updatersSet = new SpriteModifiersSet();
-			updatersSet.add(new RotateModifier(rotationSpeed, 0.5f, 0.5f));
-			updatersSet.add(new TranslateModifier(fromX, fromY, toX, toY, time, new AbsTimeLimitedModifier.CompletionListener() {
+			SpriteModifiersSet modifiersSet = new SpriteModifiersSet();
+			modifiersSet.add(new RotateModifier(rotationSpeed, 0.5f, 0.5f));
+			modifiersSet.add(new TranslateModifier(fromX, fromY, toX, toY, time, new AbsTimeLimitedModifier.CompletionListener() {
 				@Override
-				public void onComplete(AbsTimeLimitedModifier updater) {
+				public void onComplete(AbsTimeLimitedModifier modifier) {
 					ufoSprite.removeFromParent();
 					mUfoCount--;
 				}
 			}));
-			ufoSprite.setSpriteModifier(updatersSet);
+			ufoSprite.setSpriteModifier(modifiersSet);
 			mLayouts[layoutIndex].addSprite(ufoSprite);
 			mUfoCount++;
 		}

@@ -8,7 +8,9 @@ import android.graphics.RectF;
 
 
 public class AbsSprite extends AbsSpriteLayout implements ISprite {
-	protected RectF mSpriteRect;
+
+	private float mWidth;
+	private float mHeight;
 	
 	private ILayout mParent;
 	private ISpriteModifier mModifier;
@@ -20,40 +22,37 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 	
 	public AbsSprite(float x, float y, float width, float height, float scale) {
 		super(x, y, scale);
-		mSpriteRect = new RectF(x, x, x + width, x + height);
+		mWidth = width;
+		mHeight = height;
 	}
 
 	@Override
 	public void setSize(float width, float height) {
-		updateRect(mX, mY, width, height);
-	}
-	
-	@Override
-	public void setPosition(float x, float y) {
-		super.setPosition(x, y);
-		updateRect(x, y, mSpriteRect.width(), mSpriteRect.height());
+		mWidth = width;
+		mHeight = height;
 	}
 	
 	@Override
 	public float getWidth() {
-		return mSpriteRect.width();
+		return mWidth;
 	}
 
 	@Override
 	public float getHeight() {
-		return mSpriteRect.height();
+		return mHeight;
 	}
 
 	@Override
 	public boolean isVisible(RectF visibleRect) {
-		return true;//RectF.intersects(visibleRect, mSpriteRect);
+		return mX + mWidth > visibleRect.left & mX < visibleRect.right
+				& mY + mHeight > visibleRect.top & mY < visibleRect.bottom;
 	}
 	
 	@Override
 	protected void drawLayout(Canvas canvas, RectF vsibleRect) {
 		super.drawLayout(canvas, vsibleRect);
 		if(mBackGroundPaint != null)
-			canvas.drawRect(0, 0, mSpriteRect.width(), mSpriteRect.height(), mBackGroundPaint);
+			canvas.drawRect(0, 0, mWidth, mHeight, mBackGroundPaint);
 	}
 	
 	public void setBackgroundColor(int color) {
@@ -93,9 +92,5 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 	public void update(long timeDelta) {
 		if(mModifier != null)
 			mModifier.modify(this, timeDelta);
-	}
-
-	protected void updateRect(float x, float y, float width, float height) {
-		mSpriteRect.set(x, x, x + width, x + height);
 	}
 }

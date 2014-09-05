@@ -32,8 +32,8 @@ public class BitmapSprite extends AbsSprite {
 	}
 	
 	@Override
-	protected void updateRect(float x, float y, float width, float height) {
-		super.updateRect(x, y, width, height);
+	public void setSize(float width, float height) {
+		super.setSize(width, height);
 		mBitmapRect.set(0, 0, width, height);
 	}
 }
