@@ -10,7 +10,7 @@ public class BitmapSprite extends AbsSprite {
 	private Bitmap mBitmap;
 	private Paint mPaint;
 	private RectF mBitmapRect;
-	
+	private boolean isAutoRecicled;
 
 	public BitmapSprite(Bitmap bitmap, float x, float y) {
 		this(bitmap, x, y, bitmap.getWidth(), bitmap.getHeight());
@@ -23,6 +23,8 @@ public class BitmapSprite extends AbsSprite {
 		
 		mPaint = new Paint();
 		mPaint.setStyle(Style.FILL);
+		
+		isAutoRecicled = true;
 	}
 
 	@Override
@@ -35,5 +37,16 @@ public class BitmapSprite extends AbsSprite {
 	public void setSize(float width, float height) {
 		super.setSize(width, height);
 		mBitmapRect.set(0, 0, width, height);
+	}
+	
+	@Override
+	public void setParrent(ILayout parent) {
+		super.setParrent(parent);
+		if(parent == null && isAutoRecicled)
+			recicle();
+	}
+	
+	public void recicle() {
+		mBitmap.recycle();
 	}
 }

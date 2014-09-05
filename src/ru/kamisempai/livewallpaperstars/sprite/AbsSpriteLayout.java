@@ -118,7 +118,9 @@ public class AbsSpriteLayout implements ILayout {
 	public void update(long timeDelta) {
 		if(mSprites != null) {
 			while (mSpritesToRemove.size() > 0) {
-				mSprites.remove(mSpritesToRemove.peek());
+				ISprite sprite = mSpritesToRemove.peek();
+				mSprites.remove(sprite);
+				sprite.setParrent(null);
 			}
 			for(ISprite sprite: mSprites) {
 				sprite.update(timeDelta);

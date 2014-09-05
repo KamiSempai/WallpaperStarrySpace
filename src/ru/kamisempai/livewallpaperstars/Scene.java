@@ -92,6 +92,7 @@ public class Scene {
 			boolean vertical = mRandom.nextBoolean();
 			boolean leftToRight = mRandom.nextBoolean();
 			float rotationSpeed = (leftToRight ? 1 : -1) * SCRAP_ROTATE_MIN_SPEED + mRandom.nextInt((int) (SCRAP_ROTATE_MAX_SPEED - SCRAP_ROTATE_MIN_SPEED));
+			rotationSpeed *= 100 / Math.max(scrapSprite.getHeight(), scrapSprite.getWidth());
 			float speed = SCRAP_MIN_SPEED + mRandom.nextInt((int) (SCRAP_MAX_SPEED - SCRAP_MIN_SPEED));
 			
 			float fromX;
