@@ -75,20 +75,15 @@ public class LiveWallpaperService extends WallpaperService {
 			
 			final SurfaceHolder holder = getSurfaceHolder();
 
-			Canvas canvas = null;
-			try {
-				canvas = holder.lockCanvas();
-				if (canvas != null) {
-					mScene.draw(canvas, mVisibleRect);
-				}
-			} finally {
-				if (canvas != null)
-					holder.unlockCanvasAndPost(canvas);
+			Canvas canvas = holder.lockCanvas();
+			if (canvas != null) {
+				mScene.draw(canvas, mVisibleRect);
+				holder.unlockCanvasAndPost(canvas);
 			}
-
+			
 			handler.removeCallbacks(drawRunner);
 			if (visible) {
-				handler.postDelayed(drawRunner, 1000 / FRAME_RATE); // delay 10 mileseconds
+				handler.postDelayed(drawRunner, 1000 / FRAME_RATE);
 			}
 
 		}
