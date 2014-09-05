@@ -75,6 +75,7 @@ public class AbsSpriteLayout implements ILayout {
 		if(mSprites == null)
 			mSprites = new ArrayList<ISprite>();
 		mSprites.add(sprite);
+		sprite.setParrent(this);
 	}
 
 	@Override

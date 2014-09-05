@@ -90,6 +90,7 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 	
 	@Override
 	public void update(long timeDelta) {
+		super.update(timeDelta);
 		if(mModifier != null)
 			mModifier.modify(this, timeDelta);
 	}
