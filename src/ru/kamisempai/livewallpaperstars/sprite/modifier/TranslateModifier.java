@@ -1,19 +1,19 @@
-package ru.kamisempai.livewallpaperstars.sprite.updater;
+package ru.kamisempai.livewallpaperstars.sprite.modifier;
 
 import ru.kamisempai.livewallpaperstars.sprite.ISprite;
 
-public class TranslateUpdater extends AbsTimeLimitedUpdater {
+public class TranslateModifier extends AbsTimeLimitedModifier {
 	
 	private float mFromX;
 	private float mFromY;
 	private float mDeltaX;
 	private float mDeltaY;
 	
-	public TranslateUpdater(float fromX, float fromY, float toX, float toY, float time) {
+	public TranslateModifier(float fromX, float fromY, float toX, float toY, float time) {
 		this(fromX, fromY, toX, toY, time, null);
 	}
 	
-	public TranslateUpdater(float fromX, float fromY, float toX, float toY, float time, CompletionListener completionListene) {
+	public TranslateModifier(float fromX, float fromY, float toX, float toY, float time, CompletionListener completionListene) {
 		super(time, completionListene);
 		mFromX = fromX;
 		mFromY = fromY;
@@ -22,8 +22,8 @@ public class TranslateUpdater extends AbsTimeLimitedUpdater {
 	}
 
 	@Override
-	public void update(ISprite sprite, long timeDelta) {
-		super.update(sprite, timeDelta);
+	public void modify(ISprite sprite, long timeDelta) {
+		super.modify(sprite, timeDelta);
 		float progress = getProgress();
 		sprite.setPosition(mFromX + mDeltaX * progress, mFromY + mDeltaY * progress);
 	}

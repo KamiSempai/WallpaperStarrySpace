@@ -1,8 +1,8 @@
-package ru.kamisempai.livewallpaperstars.sprite.updater;
+package ru.kamisempai.livewallpaperstars.sprite.modifier;
 
 import ru.kamisempai.livewallpaperstars.sprite.ISprite;
 
-public class AbsTimeLimitedUpdater implements ISpriteUpdater {
+public class AbsTimeLimitedModifier implements ISpriteModifier {
 
 	private float mTime;
 	private float mTimeElapsed;
@@ -10,18 +10,18 @@ public class AbsTimeLimitedUpdater implements ISpriteUpdater {
 	private CompletionListener mCompletionListener;
 	
 
-	public AbsTimeLimitedUpdater(float time) {
+	public AbsTimeLimitedModifier(float time) {
 		this(time, null);
 	}
 	
-	public AbsTimeLimitedUpdater(float time, CompletionListener completionListener) {
+	public AbsTimeLimitedModifier(float time, CompletionListener completionListener) {
 		mTime = time;
 		mTimeElapsed = 0;
 		mCompletionListener = completionListener;
 	}
 
 	@Override
-	public void update(ISprite sprite, long timeDelta) {
+	public void modify(ISprite sprite, long timeDelta) {
 		if(mTimeElapsed < mTime) {
 			mTimeElapsed += timeDelta;
 			if(mCompletionListener != null && mTimeElapsed >= mTime)
@@ -44,6 +44,6 @@ public class AbsTimeLimitedUpdater implements ISpriteUpdater {
 	}
 
 	public interface CompletionListener {
-		public void onComplete(AbsTimeLimitedUpdater updater);
+		public void onComplete(AbsTimeLimitedModifier modifier);
 	}
 }

@@ -1,6 +1,6 @@
 package ru.kamisempai.livewallpaperstars.sprite;
 
-import ru.kamisempai.livewallpaperstars.sprite.updater.ISpriteUpdater;
+import ru.kamisempai.livewallpaperstars.sprite.modifier.ISpriteModifier;
 import android.graphics.RectF;
 
 public interface ISprite extends ILayout {
@@ -12,8 +12,8 @@ public interface ISprite extends ILayout {
 	
 	public boolean isVisible(RectF visibleRect);
 	
-	public void setSpriteUpdater(ISpriteUpdater updater);
-	public ISpriteUpdater getSpriteUpdater();
+	public void setSpriteModifier(ISpriteModifier modifier);
+	public ISpriteModifier getSpriteModifier();
 	
 	public void setParrent(ILayout parent);
 	public ILayout getParent();

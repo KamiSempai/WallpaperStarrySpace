@@ -5,22 +5,23 @@ import java.security.SecureRandom;
 import ru.kamisempai.livewallpaperstars.sprite.ILayout;
 import ru.kamisempai.livewallpaperstars.sprite.ISprite;
 import ru.kamisempai.livewallpaperstars.sprite.StarsLayout;
-import ru.kamisempai.livewallpaperstars.sprite.updater.AbsTimeLimitedUpdater;
-import ru.kamisempai.livewallpaperstars.sprite.updater.RotateUpdater;
-import ru.kamisempai.livewallpaperstars.sprite.updater.SpriteUpdatersSet;
-import ru.kamisempai.livewallpaperstars.sprite.updater.TranslateUpdater;
+import ru.kamisempai.livewallpaperstars.sprite.modifier.AbsTimeLimitedModifier;
+import ru.kamisempai.livewallpaperstars.sprite.modifier.RotateModifier;
+import ru.kamisempai.livewallpaperstars.sprite.modifier.SpriteModifiersSet;
+import ru.kamisempai.livewallpaperstars.sprite.modifier.TranslateModifier;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class Scene {
 	private static final float STAR_SIZE = 18;
 	private static final int LAYOUT_COUNT = 2;
-	private static final int UFO_COUNT = 20;
-	private static final int UFO_DELAY = 200;
+	private static final int UFO_COUNT = 0;
+	private static final int UFO_DELAY = 20000;
 	private static final float UFO_ROTATE_MAX_SPEED = 30;
 	private static final float UFO_ROTATE_MIN_SPEED = 10;
 	private static final float UFO_MAX_SPEED = 30;
@@ -60,8 +61,10 @@ public class Scene {
 	
 	public void onOffsetsChanged(float xOffset, float yOffset, float xStep,
 			float yStep, int xPixels, int yPixels) {
-		for(StarsLayout layout: mLayouts)
+		for(StarsLayout layout: mLayouts) {
 			layout.setPosition((surfaceWidth - layout.getWidth()) * xOffset, 0);
+			Log.d("DEBUG", "toEnd=" + (layout.getWidth() + layout.getX() - surfaceWidth) + "X=" + layout.getX() + " W=" + layout.getWidth());
+		}
 	}
 	
 	public void update(long timeDelta) {
@@ -116,16 +119,16 @@ public class Scene {
 			float delta = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 			
 			float time = delta / speed * 1000;
-			SpriteUpdatersSet updatersSet = new SpriteUpdatersSet();
-			updatersSet.addUpdater(new RotateUpdater(rotationSpeed, 0.5f, 0.5f));
-			updatersSet.addUpdater(new TranslateUpdater(fromX, fromY, toX, toY, time, new AbsTimeLimitedUpdater.CompletionListener() {
+			SpriteModifiersSet updatersSet = new SpriteModifiersSet();
+			updatersSet.add(new RotateModifier(rotationSpeed, 0.5f, 0.5f));
+			updatersSet.add(new TranslateModifier(fromX, fromY, toX, toY, time, new AbsTimeLimitedModifier.CompletionListener() {
 				@Override
-				public void onComplete(AbsTimeLimitedUpdater updater) {
+				public void onComplete(AbsTimeLimitedModifier updater) {
 					ufoSprite.removeFromParent();
 					mUfoCount--;
 				}
 			}));
-			ufoSprite.setSpriteUpdater(updatersSet);
+			ufoSprite.setSpriteModifier(updatersSet);
 			mLayouts[layoutIndex].addSprite(ufoSprite);
 			mUfoCount++;
 		}

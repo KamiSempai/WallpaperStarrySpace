@@ -2,7 +2,7 @@ package ru.kamisempai.livewallpaperstars.sprite;
 
 import java.util.Random;
 
-import ru.kamisempai.livewallpaperstars.sprite.updater.ISpriteUpdater;
+import ru.kamisempai.livewallpaperstars.sprite.modifier.ISpriteModifier;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -39,7 +39,7 @@ public class StarSprite extends AbsSprite {
 		mGlowPaint.setShader(mGlowShader);
 		mGlowPaint.setAlpha(70);
 		
-		setSpriteUpdater(new StarUpdater(flashState));
+		setSpriteModifier(new StarUpdater(flashState));
 	}
 	
 	@Override
@@ -68,7 +68,7 @@ public class StarSprite extends AbsSprite {
 //		mSpriteRect.set(x - width / 2, y - height / 2, x + width / 2, y + height / 2);
 //	}
 	
-	private static class StarUpdater implements ISpriteUpdater {
+	private static class StarUpdater implements ISpriteModifier {
 		private static final float FLASH_STEP_PER_SEC = 0.5f;
 		private static final float MIN_FLASH_STATE = 0.01f;
 		private static final float MAX_FLASH_STATE = 3f;
@@ -83,7 +83,7 @@ public class StarSprite extends AbsSprite {
 		}
 
 		@Override
-		public void update(ISprite sprite, long timeDelta) {
+		public void modify(ISprite sprite, long timeDelta) {
 			float delta = FLASH_STEP_PER_SEC * (float) timeDelta / 1000f;
 			if(delta > MAX_FLASH_STATE - MIN_FLASH_STATE) {
 				if((delta / (MAX_FLASH_STATE - MIN_FLASH_STATE)) % 2 != 0)

@@ -1,6 +1,6 @@
 package ru.kamisempai.livewallpaperstars.sprite;
 
-import ru.kamisempai.livewallpaperstars.sprite.updater.ISpriteUpdater;
+import ru.kamisempai.livewallpaperstars.sprite.modifier.ISpriteModifier;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
@@ -11,7 +11,7 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 	protected RectF mSpriteRect;
 	
 	private ILayout mParent;
-	private ISpriteUpdater mUpdater;
+	private ISpriteModifier mModifier;
 	private Paint mBackGroundPaint;
 	
 	public AbsSprite(float x, float y, float width, float height) {
@@ -46,7 +46,7 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 
 	@Override
 	public boolean isVisible(RectF visibleRect) {
-		return RectF.intersects(visibleRect, mSpriteRect);
+		return true;//RectF.intersects(visibleRect, mSpriteRect);
 	}
 	
 	@Override
@@ -68,12 +68,12 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 		mBackGroundPaint = null;
 	}
 	
-	public void setSpriteUpdater(ISpriteUpdater updater) {
-		mUpdater = updater;
+	public void setSpriteModifier(ISpriteModifier modifier) {
+		mModifier = modifier;
 	}
 	
-	public ISpriteUpdater getSpriteUpdater() {
-		return mUpdater;
+	public ISpriteModifier getSpriteModifier() {
+		return mModifier;
 	}
 	
 	public void setParrent(ILayout parent) {
@@ -91,8 +91,8 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 	
 	@Override
 	public void update(long timeDelta) {
-		if(mUpdater != null)
-			mUpdater.update(this, timeDelta);
+		if(mModifier != null)
+			mModifier.modify(this, timeDelta);
 	}
 
 	protected void updateRect(float x, float y, float width, float height) {
