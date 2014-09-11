@@ -67,6 +67,10 @@ public class Scene {
 			float depth = getScrapDepth(i);
 			mScrapLayouts[i] = new AbsSprite(0, 0, layoutWidth * depth, layoutHeight);
 		}
+		
+		for(int i = 0; i < SCRAP_COUNT; i++) {
+			addScrap(true);
+		}
 	}
 	
 	public void onOffsetsChanged(float xOffset, float yOffset, float xStep,
@@ -82,68 +86,7 @@ public class Scene {
 	public void update(long timeDelta) {
 		mScrapReleseTime += timeDelta;
 		if(mScrapCount < SCRAP_COUNT && mScrapReleseTime >= SCRAP_RELEASE_DELAY) {
-			mScrapReleseTime = 0;
-			int layoutIndex = mRandom.nextInt(mScrapLayouts.length);
-			
-			final ISprite scrapSprite = mScrapFactory.newSprite();
-			float depth = getScrapDepth(layoutIndex);
-			scrapSprite.setSize(scrapSprite.getWidth() * depth, scrapSprite.getHeight() * depth);
-
-			boolean vertical = mRandom.nextBoolean();
-			boolean leftToRight = mRandom.nextBoolean();
-			float rotationSpeed = (leftToRight ? 1 : -1) * SCRAP_ROTATE_MIN_SPEED + mRandom.nextInt((int) (SCRAP_ROTATE_MAX_SPEED - SCRAP_ROTATE_MIN_SPEED));
-			rotationSpeed *= 100 / Math.max(scrapSprite.getHeight(), scrapSprite.getWidth());
-			float speed = SCRAP_MIN_SPEED + mRandom.nextInt((int) (SCRAP_MAX_SPEED - SCRAP_MIN_SPEED));
-			
-			float fromX;
-			float fromY;
-			float toX;
-			float toY;
-			
-			if(vertical) {
-				fromY = - scrapSprite.getHeight() * 2;
-				toY = mScrapLayouts[layoutIndex].getHeight() + scrapSprite.getHeight() * 2;
-				
-				if(!leftToRight) {
-					float y = fromY;
-					fromY = toY;
-					toY = y;
-				}
-
-				fromX = mRandom.nextInt((int) mScrapLayouts[layoutIndex].getWidth());
-				toX = mRandom.nextInt((int) mScrapLayouts[layoutIndex].getWidth());
-			}
-			else {
-				fromX = - scrapSprite.getWidth() * 2;
-				toX = mScrapLayouts[layoutIndex].getWidth() + scrapSprite.getWidth() * 2;
-				
-				if(!leftToRight) {
-					float x = fromX;
-					fromX = toX;
-					toX = x;
-				}
-
-				fromY = mRandom.nextInt((int) mScrapLayouts[layoutIndex].getHeight());
-				toY = mRandom.nextInt((int) mScrapLayouts[layoutIndex].getHeight());
-			}
-			
-			float deltaX = fromX - toX;
-			float deltaY = fromY - toY;
-			float delta = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-			
-			float time = delta / speed * 1000;
-			SpriteModifiersSet modifiersSet = new SpriteModifiersSet();
-			modifiersSet.add(new RotateModifier(rotationSpeed, 0.5f, 0.5f));
-			modifiersSet.add(new TranslateModifier(fromX, fromY, toX, toY, time, new AbsTimeLimitedModifier.CompletionListener() {
-				@Override
-				public void onComplete(AbsTimeLimitedModifier modifier) {
-					scrapSprite.removeFromParent();
-					mScrapCount--;
-				}
-			}));
-			scrapSprite.setSpriteModifier(modifiersSet);
-			mScrapLayouts[layoutIndex].addSprite(scrapSprite);
-			mScrapCount++;
+			addScrap(false);
 		}
 		for(ILayout layout: mStarsLayouts)
 			layout.update(timeDelta);
@@ -162,5 +105,73 @@ public class Scene {
 	private float getScrapDepth(int index) {
 		float depthStep = (SCRAP_DEPTH_MAX - SCRAP_DEPTH_MIN) / (SCRAP_LAYOUT_COUNT - 1);
 		return SCRAP_DEPTH_MIN + depthStep * index;
+	}
+	
+	private void addScrap(boolean randomiseProgress) {
+		mScrapReleseTime = 0;
+		int layoutIndex = mRandom.nextInt(mScrapLayouts.length);
+		
+		final ISprite scrapSprite = mScrapFactory.newSprite();
+		float depth = getScrapDepth(layoutIndex);
+		scrapSprite.setSize(scrapSprite.getWidth() * depth, scrapSprite.getHeight() * depth);
+
+		boolean vertical = mRandom.nextBoolean();
+		boolean leftToRight = mRandom.nextBoolean();
+		float rotationSpeed = (leftToRight ? 1 : -1) * SCRAP_ROTATE_MIN_SPEED + mRandom.nextInt((int) (SCRAP_ROTATE_MAX_SPEED - SCRAP_ROTATE_MIN_SPEED));
+		rotationSpeed *= 100 / Math.max(scrapSprite.getHeight(), scrapSprite.getWidth());
+		float speed = SCRAP_MIN_SPEED + mRandom.nextInt((int) (SCRAP_MAX_SPEED - SCRAP_MIN_SPEED));
+		
+		float fromX;
+		float fromY;
+		float toX;
+		float toY;
+		
+		if(vertical) {
+			fromY = - scrapSprite.getHeight() * 2;
+			toY = mScrapLayouts[layoutIndex].getHeight() + scrapSprite.getHeight() * 2;
+			
+			if(!leftToRight) {
+				float y = fromY;
+				fromY = toY;
+				toY = y;
+			}
+
+			fromX = mRandom.nextInt((int) mScrapLayouts[layoutIndex].getWidth());
+			toX = mRandom.nextInt((int) mScrapLayouts[layoutIndex].getWidth());
+		}
+		else {
+			fromX = - scrapSprite.getWidth() * 2;
+			toX = mScrapLayouts[layoutIndex].getWidth() + scrapSprite.getWidth() * 2;
+			
+			if(!leftToRight) {
+				float x = fromX;
+				fromX = toX;
+				toX = x;
+			}
+
+			fromY = mRandom.nextInt((int) mScrapLayouts[layoutIndex].getHeight());
+			toY = mRandom.nextInt((int) mScrapLayouts[layoutIndex].getHeight());
+		}
+		
+		float deltaX = fromX - toX;
+		float deltaY = fromY - toY;
+		float delta = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+		
+		float time = delta / speed * 1000;
+		SpriteModifiersSet modifiersSet = new SpriteModifiersSet();
+		modifiersSet.add(new RotateModifier(rotationSpeed, 0.5f, 0.5f));
+		TranslateModifier translateModifier = new TranslateModifier(fromX, fromY, toX, toY, time, new AbsTimeLimitedModifier.CompletionListener() {
+			@Override
+			public void onComplete(AbsTimeLimitedModifier modifier) {
+				scrapSprite.removeFromParent();
+				mScrapCount--;
+			}
+		});
+		if(randomiseProgress)
+			translateModifier.setProgress(mRandom.nextFloat());
+		modifiersSet.add(translateModifier);
+		scrapSprite.setSpriteModifier(modifiersSet);
+		mScrapLayouts[layoutIndex].addSprite(scrapSprite);
+		mScrapCount++;
 	}
 }
