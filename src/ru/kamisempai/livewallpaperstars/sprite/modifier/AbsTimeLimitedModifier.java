@@ -34,6 +34,15 @@ public class AbsTimeLimitedModifier implements ISpriteModifier {
 			return mTimeElapsed / mTime;
 		return 1;
 	}
+	
+	public void setProgress(float progress) {
+		if(progress >= 1)
+			mTimeElapsed = mTime;
+		else if(progress <= 0)
+			mTimeElapsed = 0;
+		else
+			mTimeElapsed = mTime * progress;
+	}
 
 	public CompletionListener getCompletionListener() {
 		return mCompletionListener;
