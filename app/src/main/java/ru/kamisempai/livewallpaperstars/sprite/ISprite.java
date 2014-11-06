@@ -15,7 +15,7 @@ public interface ISprite extends ILayout {
 	public void setSpriteModifier(ISpriteModifier modifier);
 	public ISpriteModifier getSpriteModifier();
 	
-	public void setParrent(ILayout parent);
+	public void setParent(ILayout parent);
 	public ILayout getParent();
 	public void removeFromParent();
 }

@@ -85,7 +85,7 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 		return mModifier;
 	}
 	
-	public void setParrent(ILayout parent) {
+	public void setParent(ILayout parent) {
 		mParent = parent;
 	}
 	

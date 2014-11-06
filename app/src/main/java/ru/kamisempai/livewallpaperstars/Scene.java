@@ -38,7 +38,7 @@ public class Scene {
 	private StarsLayout[] mStarsLayouts;
 	private ISprite[] mScrapLayouts;
 	private int surfaceWidth; 
-	private RandomSpriteFactory mScrapFactory;
+	private RandomScrapFactory mScrapFactory;
 
 	private SecureRandom mRandom;
 	private long mScrapReleseTime;
@@ -50,7 +50,7 @@ public class Scene {
         float density = context.getResources().getDisplayMetrics().density;
 
 		mRandom = new SecureRandom(new byte[] {(byte) width, (byte) height, (byte) System.currentTimeMillis()});
-		mScrapFactory = new RandomSpriteFactory(context);
+		mScrapFactory = new RandomScrapFactory(context, SCRAP_DEPTH_MIN, SCRAP_DEPTH_MAX);
 		
 		surfaceWidth = width;
 		mScrapReleseTime = 0;
@@ -129,9 +129,9 @@ public class Scene {
 	private void addScrap(boolean randomiseProgress) {
 		mScrapReleseTime = 0;
 		int layoutIndex = mRandom.nextInt(mScrapLayouts.length);
-		
-		final ISprite scrapSprite = mScrapFactory.newSprite();
-		float depth = getScrapDepth(layoutIndex);
+
+        float depth = getScrapDepth(layoutIndex);
+		final ISprite scrapSprite = mScrapFactory.newSprite(depth);
 		scrapSprite.setSize(scrapSprite.getWidth() * depth, scrapSprite.getHeight() * depth);
 
 		boolean vertical = mRandom.nextBoolean();

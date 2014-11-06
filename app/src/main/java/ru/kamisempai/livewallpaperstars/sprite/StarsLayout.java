@@ -3,6 +3,7 @@ package ru.kamisempai.livewallpaperstars.sprite;
 import java.security.SecureRandom;
 
 import android.annotation.SuppressLint;
+import android.graphics.RectF;
 
 public class StarsLayout extends AbsSprite {
 
@@ -39,4 +40,9 @@ public class StarsLayout extends AbsSprite {
 				}
 			}
 	}
+
+    @Override
+    public boolean isVisible(RectF visibleRect) {
+        return true;
+    }
 }
