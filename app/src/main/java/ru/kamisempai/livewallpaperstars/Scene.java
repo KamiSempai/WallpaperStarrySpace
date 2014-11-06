@@ -18,8 +18,10 @@ import android.graphics.RectF;
 import android.view.SurfaceHolder;
 
 public class Scene {
-	private static final float STAR_SIZE = 18;
-	private static final int STARS_LAYOUT_COUNT = 15;
+	private static final float STAR_SIZE = 8;
+    private static final int STARS_LAYOUT_COUNT = 15;
+    private static final int STARS_LAYOUT_WIDTH_COEF= 3;
+    private static final int STARS_LAYOUT_HEIGHT_COEF= 1;
 	private static final int SCRAP_LAYOUT_COUNT = 5;
 	private static final int SCRAP_COUNT = 10;
 	private static final int SCRAP_RELEASE_DELAY = 2000;
@@ -45,6 +47,8 @@ public class Scene {
 	@SuppressLint("TrulyRandom")
 	public Scene(Context context, SurfaceHolder holder, int format,
 			int width, int height) {
+        float density = context.getResources().getDisplayMetrics().density;
+
 		mRandom = new SecureRandom(new byte[] {(byte) width, (byte) height, (byte) System.currentTimeMillis()});
 		mScrapFactory = new RandomSpriteFactory(context);
 		
@@ -52,14 +56,14 @@ public class Scene {
 		mScrapReleseTime = 0;
 		mScrapCount = 0;
 		
-		float layoutWidth = width * 3;
-		float layoutHeight = height;
+		float layoutWidth = width * STARS_LAYOUT_WIDTH_COEF;
+		float layoutHeight = height * STARS_LAYOUT_HEIGHT_COEF;
 		
 		int starsPerLayout = STARS_COUNT / STARS_LAYOUT_COUNT;
 		mStarsLayouts = new StarsLayout[STARS_LAYOUT_COUNT];
 		for(int i = 0; i < mStarsLayouts.length; i++) {
-			float depth = STAR_DEPTH_MIN + ((STAR_DEPTH_MAX - STAR_DEPTH_MIN) / (STARS_LAYOUT_COUNT - 1)) * i;
-			mStarsLayouts[i] = new StarsLayout(layoutWidth * depth, layoutHeight, starsPerLayout , STAR_SIZE * depth);
+			float depth = getStarsDepth(i);
+			mStarsLayouts[i] = new StarsLayout(layoutWidth * depth, layoutHeight, starsPerLayout , STAR_SIZE * depth * density);
 		}
 
 		mScrapLayouts = new ISprite[SCRAP_LAYOUT_COUNT];
@@ -82,6 +86,17 @@ public class Scene {
 			layout.setPosition((surfaceWidth - layout.getWidth()) * xOffset, 0);
 		}
 	}
+
+    public void onSurfaceChanged(SurfaceHolder holder, int format,
+                                 int width, int height) {
+        float layoutWidth = width * STARS_LAYOUT_WIDTH_COEF;
+        float layoutHeight = height * STARS_LAYOUT_HEIGHT_COEF;
+
+        for(int i = 0; i < mStarsLayouts.length; i++) {
+            float depth = getStarsDepth(i);
+            mStarsLayouts[i].setSize(layoutWidth * depth, layoutHeight);
+        }
+    }
 	
 	public void update(long timeDelta) {
 		mScrapReleseTime += timeDelta;
@@ -101,6 +116,10 @@ public class Scene {
 		for(ILayout layout: mScrapLayouts)
 			layout.draw(canvas, vsibleRect);
 	}
+
+    private float getStarsDepth(int index) {
+        return STAR_DEPTH_MIN + ((STAR_DEPTH_MAX - STAR_DEPTH_MIN) / (STARS_LAYOUT_COUNT - 1)) * index;
+    }
 	
 	private float getScrapDepth(int index) {
 		float depthStep = (SCRAP_DEPTH_MAX - SCRAP_DEPTH_MIN) / (SCRAP_LAYOUT_COUNT - 1);
