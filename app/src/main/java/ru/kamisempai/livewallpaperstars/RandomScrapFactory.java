@@ -33,6 +33,8 @@ public class RandomScrapFactory {
     private float mMinDepth;
     private float mMaxDepth;
     private float mDeltaDepth;
+
+    private float mScrapCount;
 	
 	public RandomScrapFactory(Context context, float minDepth, float maxDepth) {
 		mRandom = new Random();
@@ -46,18 +48,19 @@ public class RandomScrapFactory {
         try {
             for (int i = 1; i <= SCRAP_DEPTH.length; i++) {
                 scrapList[i - 1] = mAssetManager.list(SCRAP_FOLDER + i);
+                mScrapCount =+ scrapList[i - 1].length;
             }
 		} catch (IOException e) {
 			e.printStackTrace();
             for (int i = 1; i < SCRAP_DEPTH.length; i++) {
-                scrapList[i] = new String[]{"scrap/asteroid1.png"};
+                scrapList[i] = new String[]{"asteroid1.png"};
             }
 		}
         try {
         	asteroidsList = mAssetManager.list(ASTERODS_FOLDER);
 		} catch (IOException e) {
 			e.printStackTrace();
-			asteroidsList = new String[]{"scrap/asteroid1.png"};
+			asteroidsList = new String[]{"asteroid1.png"};
 		}
 	}
 
