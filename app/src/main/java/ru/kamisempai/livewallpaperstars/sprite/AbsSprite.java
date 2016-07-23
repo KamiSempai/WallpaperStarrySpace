@@ -30,6 +30,16 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 	public void setSize(float width, float height) {
 		mWidth = width;
 		mHeight = height;
+        float difX = width / mWidth;
+        float difY = height / mHeight;
+        if (difX != 1 || difY != 1) {
+            mWidth = width;
+            mHeight = height;
+            if(mSprites != null)
+                for(ISprite sprite: mSprites) {
+                    sprite.setPosition(sprite.getX() * difX, sprite.getY() * difY);
+                }
+        }
 	}
 	
 	@Override
@@ -75,7 +85,7 @@ public class AbsSprite extends AbsSpriteLayout implements ISprite {
 		return mModifier;
 	}
 	
-	public void setParrent(ILayout parent) {
+	public void setParent(ILayout parent) {
 		mParent = parent;
 	}
 	

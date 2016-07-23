@@ -22,7 +22,7 @@ public class AbsTimeLimitedModifier implements ISpriteModifier {
 
 	@Override
 	public void modify(ISprite sprite, long timeDelta) {
-		if(mTimeElapsed < mTime) {
+		if(mTimeElapsed <= mTime) {
 			mTimeElapsed += timeDelta;
 			if(mCompletionListener != null && mTimeElapsed >= mTime)
 				mCompletionListener.onComplete(this);

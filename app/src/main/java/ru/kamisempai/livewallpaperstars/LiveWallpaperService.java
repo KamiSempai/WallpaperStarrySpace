@@ -49,7 +49,10 @@ public class LiveWallpaperService extends WallpaperService {
 				int width, int height) {
 			super.onSurfaceChanged(holder, format, width, height);
 			mVisibleRect = new RectF(0, 0, width, height);
-			mScene = new Scene(getApplicationContext(), holder, format, width, height);
+            if (mScene == null)
+			    mScene = new Scene(getApplicationContext(), holder, format, width, height);
+            else
+                mScene.onSurfaceChanged(holder, format, width, height);
 		}
 
 		@Override

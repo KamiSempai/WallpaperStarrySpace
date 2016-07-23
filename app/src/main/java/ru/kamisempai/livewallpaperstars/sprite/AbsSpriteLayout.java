@@ -75,7 +75,7 @@ public class AbsSpriteLayout implements ILayout {
 		if(mSprites == null)
 			mSprites = new ArrayList<ISprite>();
 		mSprites.add(sprite);
-		sprite.setParrent(this);
+		sprite.setParent(this);
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class AbsSpriteLayout implements ILayout {
 			while (mSpritesToRemove.size() > 0) {
 				ISprite sprite = mSpritesToRemove.peek();
 				mSprites.remove(sprite);
-				sprite.setParrent(null);
+				sprite.setParent(null);
 			}
 			for(ISprite sprite: mSprites) {
 				sprite.update(timeDelta);

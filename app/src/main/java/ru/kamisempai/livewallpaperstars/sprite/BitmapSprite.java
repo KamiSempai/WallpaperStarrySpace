@@ -40,8 +40,8 @@ public class BitmapSprite extends AbsSprite {
 	}
 	
 	@Override
-	public void setParrent(ILayout parent) {
-		super.setParrent(parent);
+	public void setParent(ILayout parent) {
+		super.setParent(parent);
 		if(parent == null && isAutoRecicled)
 			recicle();
 	}

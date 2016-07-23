@@ -3,11 +3,10 @@ package ru.kamisempai.livewallpaperstars.sprite;
 import java.security.SecureRandom;
 
 import android.annotation.SuppressLint;
+import android.graphics.RectF;
 
-public class StarsLayout extends AbsSpriteLayout {
-	
-	private float mWidth;
-	private float mHeight;
+public class StarsLayout extends AbsSprite {
+
 	private float mStarSize;
 	private int mStarsCount;
 	private SecureRandom mRandom;
@@ -15,9 +14,7 @@ public class StarsLayout extends AbsSpriteLayout {
 
 	@SuppressLint("TrulyRandom")
 	public StarsLayout(float width, float height, int starsCount, float starSize) {
-		super(0, 0, 1);
-		mWidth = width;
-		mHeight = height;
+		super(0, 0, width, height, 1);
 		mStarsCount = starsCount;
 		mRandom = new SecureRandom(new byte[] {(byte) width, (byte) height, (byte) starsCount, (byte) (starSize * 10)});
 		mStarSize = starSize;
@@ -27,19 +24,11 @@ public class StarsLayout extends AbsSpriteLayout {
 	public void update(long timeDelta) {
 		if(mSprites == null || mSprites.size() < mStarsCount) {
 			float random = mRandom.nextFloat();
-			StarSprite sprite = new StarSprite( mWidth * random, mRandom.nextFloat() * mHeight, mStarSize, mStarSize, mStarsColor, mRandom.nextFloat());
+			StarSprite sprite = new StarSprite( getWidth() * random, mRandom.nextFloat() * getHeight(), mStarSize, mStarSize, mStarsColor, mRandom.nextFloat());
 			addSprite(sprite);
 		}
 		super.update(timeDelta);
 		moveStars();
-	}
-	
-	public float getWidth() {
-		return mWidth;
-	}
-	
-	public float getHeight() {
-		return mHeight;
 	}
 	
 	private void moveStars() {
@@ -47,8 +36,13 @@ public class StarsLayout extends AbsSpriteLayout {
 			for(ISprite sprite: mSprites) {
 				if(sprite.getScale() <= 0.05) {
 					float random = mRandom.nextFloat();
-					sprite.setPosition(mWidth  * random, mRandom.nextFloat() * mHeight);
+					sprite.setPosition(getWidth()  * random, mRandom.nextFloat() * getHeight());
 				}
 			}
 	}
+
+    @Override
+    public boolean isVisible(RectF visibleRect) {
+        return true;
+    }
 }
